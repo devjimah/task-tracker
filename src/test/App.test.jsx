@@ -21,7 +21,7 @@ describe('App – Integration', () => {
 
   afterEach(() => {
     cleanup();
-    vi.restoreAllMocks();
+    vi.unstubAllGlobals();
   });
   it('adds a task and displays it in the list', async () => {
     const user = userEvent.setup();
