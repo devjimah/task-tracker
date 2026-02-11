@@ -95,7 +95,13 @@ function App() {
 
   return (
     <div className="app">
-      <h1>Task Tracker</h1>
+      <header className="app-header">
+        <h1>
+          <span className="header-icon">&#9745;</span>
+          Task Tracker
+        </h1>
+        <p className="app-subtitle">Stay organized. Get things done.</p>
+      </header>
       <TaskSummary tasks={tasks} />
       <TaskForm onAddTask={addTask} />
       <TaskFilter current={filter} onFilterChange={setFilter} />

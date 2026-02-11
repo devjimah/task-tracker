@@ -25,8 +25,10 @@ export default function HealthIndicator() {
 
   return (
     <div className="health-indicator">
-      Status: <strong>{status}</strong> | Uptime: {uptime}s | Rendered at:{' '}
-      {new Date().toLocaleTimeString()}
+      <span className="health-dot" />
+      <span>{status}</span>
+      <span>Uptime: {uptime}s</span>
+      <span>{new Date().toLocaleTimeString()}</span>
     </div>
   );
 }

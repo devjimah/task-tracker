@@ -24,7 +24,7 @@ export default function TaskItem({ task, onToggle, onDelete }) {
           onClick={() => onDelete(task.id)}
           aria-label={`Delete "${task.title}"`}
         >
-          Delete
+          &#10005;
         </button>
       )}
     </li>

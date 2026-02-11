@@ -28,7 +28,7 @@ export default function TaskForm({ onAddTask }) {
         aria-label="Task title"
       />
       <button type="submit" className="btn btn-add">
-        Add
+        + Add
       </button>
     </form>
   );

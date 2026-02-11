@@ -65,17 +65,17 @@ describe('App – Integration', () => {
     await user.click(checkboxes[1]); // Task A is the second (added first)
 
     // Filter to Completed
-    await user.click(screen.getByText('Completed'));
+    await user.click(screen.getByRole('button', { name: /completed/i }));
     expect(screen.getByText('Task A')).toBeInTheDocument();
     expect(screen.queryByText('Task B')).not.toBeInTheDocument();
 
     // Filter to Pending
-    await user.click(screen.getByText('Pending'));
+    await user.click(screen.getByRole('button', { name: /pending/i }));
     expect(screen.queryByText('Task A')).not.toBeInTheDocument();
     expect(screen.getByText('Task B')).toBeInTheDocument();
 
     // Back to All
-    await user.click(screen.getByText('All'));
+    await user.click(screen.getByRole('button', { name: /^all$/i }));
     expect(screen.getByText('Task A')).toBeInTheDocument();
     expect(screen.getByText('Task B')).toBeInTheDocument();
   });
@@ -84,13 +84,15 @@ describe('App – Integration', () => {
     const user = userEvent.setup();
     render(<App />);
 
-    expect(screen.getByText(/Total: 0/)).toBeInTheDocument();
+    // All three summary cards should show 0 initially
+    const summaryCards = document.querySelectorAll('.summary-card .count');
+    summaryCards.forEach((card) => expect(card.textContent).toBe('0'));
 
     const input = screen.getByPlaceholderText(/enter a new task/i);
     await user.type(input, 'Count task');
     await user.click(screen.getByRole('button', { name: /add/i }));
 
-    expect(screen.getByText(/Total: 1/)).toBeInTheDocument();
-    expect(screen.getByText(/Pending: 1/)).toBeInTheDocument();
+    const totalCard = document.querySelector('.summary-card.total .count');
+    expect(totalCard.textContent).toBe('1');
   });
 });

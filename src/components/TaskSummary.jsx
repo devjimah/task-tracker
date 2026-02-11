@@ -10,10 +10,19 @@ export default function TaskSummary({ tasks }) {
   const pending = total - completed;
 
   return (
-    <div className="task-summary">
-      <span>Total: {total}</span> |
-      <span>Pending: {pending}</span> |
-      <span>Completed: {completed}</span>
+    <div className="summary-grid">
+      <div className="summary-card total">
+        <span className="count">{total}</span>
+        <span className="label">Total</span>
+      </div>
+      <div className="summary-card pending">
+        <span className="count">{pending}</span>
+        <span className="label">Pending</span>
+      </div>
+      <div className="summary-card done">
+        <span className="count">{completed}</span>
+        <span className="label">Done</span>
+      </div>
     </div>
   );
 }

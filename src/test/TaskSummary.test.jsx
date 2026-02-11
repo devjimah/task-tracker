@@ -5,9 +5,8 @@ import TaskSummary from '../components/TaskSummary';
 describe('TaskSummary', () => {
   it('shows zero counts when there are no tasks', () => {
     render(<TaskSummary tasks={[]} />);
-    expect(screen.getByText(/Total: 0/)).toBeInTheDocument();
-    expect(screen.getByText(/Pending: 0/)).toBeInTheDocument();
-    expect(screen.getByText(/Completed: 0/)).toBeInTheDocument();
+    const counts = screen.getAllByText('0');
+    expect(counts).toHaveLength(3);
   });
 
   it('shows correct counts for a mix of pending and completed tasks', () => {
@@ -17,16 +16,16 @@ describe('TaskSummary', () => {
       { id: 3, title: 'C', completed: false },
     ];
     render(<TaskSummary tasks={tasks} />);
-    expect(screen.getByText(/Total: 3/)).toBeInTheDocument();
-    expect(screen.getByText(/Pending: 2/)).toBeInTheDocument();
-    expect(screen.getByText(/Completed: 1/)).toBeInTheDocument();
+    expect(screen.getByText('3')).toBeInTheDocument();
+    expect(screen.getByText('2')).toBeInTheDocument();
+    expect(screen.getByText('1')).toBeInTheDocument();
   });
 
   it('updates counts dynamically when tasks change', () => {
-    const { rerender } = render(
+    const { rerender, container } = render(
       <TaskSummary tasks={[{ id: 1, title: 'A', completed: false }]} />
     );
-    expect(screen.getByText(/Total: 1/)).toBeInTheDocument();
+    expect(container.querySelector('.summary-card.total .count').textContent).toBe('1');
 
     rerender(
       <TaskSummary
@@ -36,7 +35,7 @@ describe('TaskSummary', () => {
         ]}
       />
     );
-    expect(screen.getByText(/Total: 2/)).toBeInTheDocument();
-    expect(screen.getByText(/Completed: 1/)).toBeInTheDocument();
+    expect(container.querySelector('.summary-card.total .count').textContent).toBe('2');
+    expect(container.querySelector('.summary-card.done .count').textContent).toBe('1');
   });
 });

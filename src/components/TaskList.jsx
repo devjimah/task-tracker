@@ -10,7 +10,13 @@ import TaskItem from './TaskItem';
  */
 export default function TaskList({ tasks, onToggle, onDelete }) {
   if (tasks.length === 0) {
-    return <p className="empty-state">No tasks yet. Add one above!</p>;
+    return (
+      <div className="empty-state">
+        <span className="empty-icon">&#128203;</span>
+        <span className="empty-text">No tasks yet</span>
+        <span className="empty-hint">Add your first task above to get started!</span>
+      </div>
+    );
   }
 
   return (
