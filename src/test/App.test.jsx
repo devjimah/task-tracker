@@ -1,9 +1,18 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from '../App';
 
 describe('App – Integration', () => {
+  beforeEach(() => {
+    const store = {};
+    vi.stubGlobal('localStorage', {
+      getItem: (key) => store[key] ?? null,
+      setItem: (key, value) => { store[key] = String(value); },
+      removeItem: (key) => { delete store[key]; },
+      clear: () => { Object.keys(store).forEach((k) => delete store[k]); },
+    });
+  });
   it('adds a task and displays it in the list', async () => {
     const user = userEvent.setup();
     render(<App />);
@@ -45,7 +54,7 @@ describe('App – Integration', () => {
     await user.click(screen.getByRole('button', { name: /add/i }));
     expect(screen.getByText('Delete me')).toBeInTheDocument();
 
-    await user.click(screen.getByRole('button', { name: /delete/i }));
+    await user.click(screen.getAllByRole('button', { name: /delete/i })[0]);
     expect(screen.queryByText('Delete me')).not.toBeInTheDocument();
   });
 
