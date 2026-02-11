@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import TaskForm from './components/TaskForm';
 import TaskList from './components/TaskList';
 import TaskFilter from './components/TaskFilter';
@@ -44,14 +44,14 @@ function loadFromStorage() {
   return { tasks: [], nextId: 1 };
 }
 
-let nextId = loadFromStorage().nextId;
-
 /**
  * App — root component for the Task Tracker application.
  * Manages all task state and delegates to child components.
  */
 function App() {
-  const [tasks, setTasks] = useState(() => loadFromStorage().tasks);
+  const initial = useRef(loadFromStorage());
+  const [tasks, setTasks] = useState(() => initial.current.tasks);
+  const nextId = useRef(initial.current.nextId);
   const [filter, setFilter] = useState('all');
 
   // US-6: Persist tasks to localStorage whenever they change
@@ -67,7 +67,7 @@ function App() {
 
   /** US-1: Add a new task with the given title */
   const addTask = (title) => {
-    const newTask = { id: nextId++, title, completed: false };
+    const newTask = { id: nextId.current++, title, completed: false };
     setTasks((prev) => [newTask, ...prev]);
     logger.info(`Task added: "${title}" (id: ${newTask.id})`);
   };

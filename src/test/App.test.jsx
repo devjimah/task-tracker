@@ -1,17 +1,27 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { render, screen, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from '../App';
 
 describe('App – Integration', () => {
+  let store;
+
   beforeEach(() => {
-    const store = {};
-    vi.stubGlobal('localStorage', {
-      getItem: (key) => store[key] ?? null,
-      setItem: (key, value) => { store[key] = String(value); },
-      removeItem: (key) => { delete store[key]; },
-      clear: () => { Object.keys(store).forEach((k) => delete store[k]); },
-    });
+    store = {};
+    const mockStorage = {
+      getItem: vi.fn((key) => store[key] ?? null),
+      setItem: vi.fn((key, value) => { store[key] = String(value); }),
+      removeItem: vi.fn((key) => { delete store[key]; }),
+      clear: vi.fn(() => { store = {}; }),
+      get length() { return Object.keys(store).length; },
+      key: vi.fn((i) => Object.keys(store)[i] ?? null),
+    };
+    vi.stubGlobal('localStorage', mockStorage);
+  });
+
+  afterEach(() => {
+    cleanup();
+    vi.restoreAllMocks();
   });
   it('adds a task and displays it in the list', async () => {
     const user = userEvent.setup();
