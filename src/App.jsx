@@ -49,12 +49,9 @@ function loadFromStorage() {
  * Manages all task state and delegates to child components.
  */
 function App() {
-  const initialRef = useRef(null);
-  if (initialRef.current === null) {
-    initialRef.current = loadFromStorage();
-  }
-  const [tasks, setTasks] = useState(() => initialRef.current.tasks);
-  const nextId = useRef(initialRef.current.nextId);
+  const [initialData] = useState(() => loadFromStorage());
+  const [tasks, setTasks] = useState(() => initialData.tasks);
+  const nextId = useRef(initialData.nextId);
   const [filter, setFilter] = useState('all');
 
   // US-6: Persist tasks to localStorage whenever they change
