@@ -99,6 +99,4 @@ The GitHub Actions pipeline (`.github/workflows/ci.yml`) runs on every push and 
 
 Tested against Node.js 18 and 20.
 
-## License
-
-MIT
+![CI/CD pipeline image](image.png)
